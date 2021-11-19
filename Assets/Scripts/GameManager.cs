@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Slider _timeSlider;
+    [SerializeField] private Text _interactionText;
     
     private float _TimeLeft = 1f;
     public float TimeLeft
@@ -39,7 +40,16 @@ public class GameManager : MonoBehaviour
         TimeLeft -= Time.deltaTime * timeDecreasePerSecond;
     }
 
-    
+    public void ShowInteractionMessage(IInteractable interactable)
+    {
+        SetActiveInteractionMessage(true);
+        _interactionText.text = interactable.interactionMessage;
+    }
+
+    public void SetActiveInteractionMessage(bool state)
+    {
+        _interactionText.gameObject.SetActive(state);
+    }
     
     public void GameOver(bool success)
     {
