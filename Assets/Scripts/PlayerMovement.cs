@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,14 @@ public class PlayerMovement : MonoBehaviour
 
     public CharacterController controls;
     public float speed = 12f;
+
+    public static PlayerMovement Instance;
+
+    private void Start()
+    {
+        Instance = this;
+    }
+
     // Update is called once per frame
     void Update()
     {

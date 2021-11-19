@@ -6,14 +6,20 @@ using UnityEngine;
 public class PlayerTriggers : MonoBehaviour
 {
     public IInteractable interactionObject;
+    public Hook hook;
+
+    public static PlayerTriggers Instance;
     void Start()
     {
-        
+        Instance = this;
     }
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            hook.StretchHook();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
