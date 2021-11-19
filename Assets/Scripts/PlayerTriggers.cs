@@ -18,18 +18,20 @@ public class PlayerTriggers : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Interactable")) { return; }
-        IInteractable interactable = other.GetComponent<IInteractable>();
-        if (interactable == null){ return; }
+        if (other.CompareTag("Interactable"))
+        {
+            IInteractable interactable = other.GetComponent<IInteractable>();
+            if (interactable == null){ return; }
 
-        interactionObject = interactable;
-        if (interactionObject.autoInteract)
-        {
-            interactionObject.Interact();
-        }
-        else
-        {
-            GameManager.Instance.ShowInteractionMessage(interactionObject);
+            interactionObject = interactable;
+            if (interactionObject.autoInteract)
+            {
+                interactionObject.Interact();
+            }
+            else
+            {
+                GameManager.Instance.ShowInteractionMessage(interactionObject);
+            }
         }
     }
 

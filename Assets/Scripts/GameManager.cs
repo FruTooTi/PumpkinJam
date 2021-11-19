@@ -23,6 +23,16 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    private int _LevelScore = 0;
+    public int LevelScore
+    {
+        get { return _LevelScore; }
+        set
+        {
+            _LevelScore = value;
+        }
+    }
+    
     public const float timeDecreasePerSecond = .01f;
 
     public static GameManager Instance;
@@ -48,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     public void SetActiveInteractionMessage(bool state)
     {
-        _interactionText.gameObject.SetActive(state);
+        _interactionText.transform.parent.gameObject.SetActive(state);
     }
     
     public void GameOver(bool success)
