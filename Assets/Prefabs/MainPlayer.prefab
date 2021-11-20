@@ -96,8 +96,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controls: {fileID: 8955108074765258830}
+  body: {fileID: 8955108074765258829}
+  camera: {fileID: 8955108075213313499}
   speed: 12
-  jumpvel: 4
+  slidevel: 16
   gravity: -9.81
   groundCheck: {fileID: 1087904150}
   groundMask:
