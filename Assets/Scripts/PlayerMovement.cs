@@ -29,31 +29,40 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
         StayOnGround() ;
-
-        if(Input.GetButtonDown("Jump") && isGrounded)
-        {
-            velocity.y = 5.4f;
-        }
 
         velocity.y += gravity * Time.deltaTime;
         controls.Move(velocity * Time.deltaTime);
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * x + transform.forward * z;
-        controls.Move(move * speed * Time.deltaTime);
+        controls.Move(move() * speed * Time.deltaTime);
 
         slide_speed = Mathf.Sqrt(Mathf.Pow(12f,2f) + Mathf.Pow(0.12f,2f));
         current_speed = Mathf.Sqrt(Mathf.Pow(controls.velocity.x, 2f) + Mathf.Pow(controls.velocity.z, 2f));
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && current_speed > slide_speed / 1.5)
+        isSliding(move());
+    }
+
+    //Yeri denetler 
+    //Oyuncunun yerde kalmasını ve zıplamasını sağlar
+    void StayOnGround()
+    {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
+        if (isGrounded && velocity.y < 0)
         {
-            slide = true;
+            velocity.y = -4f;
         }
-        if(slide)
+        
+        if(Input.GetButtonDown("Jump") && isGrounded)
+        {
+            velocity.y = 5.4f;
+        }
+    }
+
+    //Oyuncunun kaymasını sağlar
+    void isSliding(Vector3 move)
+    {
+        if (Input.GetKeyDown(KeyCode.LeftControl) && current_speed > slide_speed / 1.5)
         {
             controls.height = heightinit / 4;
             camera.localPosition = new Vector3(camerainit.x, camerainit.y / 3, camerainit.z);
@@ -66,13 +75,11 @@ public class PlayerMovement : MonoBehaviour
                 slidevel = 20f;
             }
         }
+    }
 
-    void StayOnGround()
+    private Vector3 move()
     {
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -4f;
-        }
+        return transform.right * Input.GetAxis("Horizontal") + transform.forward * Input.GetAxis("Vertical");
     }
-    }
+    
 }
