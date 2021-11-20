@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundMask;
 
     public float speed = 12f;
-    public float slidevel = 16f;
+    public float slidevel = 14f;
     public float gravity = -9.81f;
     public float groundDistance = 0.4f;
     
@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject current_wall;
     public GameObject prev_wall;
 
-    bool wall_jump = false;
+    bool wall_jump , LeftControlUpped;
 
     private float slide_speed, heightinit, current_speed;
 
@@ -35,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+
         StayOnGround() ;
 
         velocity.y += gravity * Time.deltaTime;
@@ -50,10 +52,8 @@ public class PlayerMovement : MonoBehaviour
 
     //Yeri denetler 
     //Oyuncunun yerde kalmasını ve zıplamasını sağlar
-    void StayOnGround()
+    bool StayOnGround()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -4f;
@@ -65,33 +65,33 @@ public class PlayerMovement : MonoBehaviour
         
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
-            velocity.y = 5.4f;
-            speed = 6f;
+            velocity.y = 6.8f;
         }
+        return isGrounded ;
     }
 
     //Oyuncunun kaymasını sağlar
     void isSliding(Vector3 move, float slide_speed, float current_speed)
     {
-        if(!button_release)
-            slide = Input.GetKey(KeyCode.LeftControl) && current_speed > slide_speed / 1.5;
-        if (Input.GetKeyUp(KeyCode.LeftControl))
-        {
-            StartCoroutine(CooldownTimer());
-        }
+        if(!slide)
+            slide = Input.GetKeyDown(KeyCode.LeftControl) && current_speed > slide_speed / 1.5 && isGrounded;
         if (slide)
         {
             controls.height = heightinit / 4;
             camera.localPosition = new Vector3(camerainit.x, camerainit.y / 3, camerainit.z);
-            controls.Move(move * slidevel * Time.deltaTime);
+            controls.Move(Vector3.right * slidevel * Time.deltaTime);
             slidevel -= 0.05f;
-            if (slidevel <= -11f)
+            if (slidevel <= -11f )
             {
-                slide = false;
-                button_release = true;
-                controls.height = heightinit;
-                slidevel = 16f;
-                StartCoroutine(CooldownTimer());
+                StartCoroutine(CooldownTimer()) ;
+            }
+            if (Input.GetKeyUp(KeyCode.LeftControl) && !LeftControlUpped)
+            {
+                LeftControlUpped = true ;
+            }
+            if (slidevel < 2f && LeftControlUpped)
+            {
+                StartCoroutine(CooldownTimer()) ;
             }
         }
     }
@@ -103,10 +103,11 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator CooldownTimer()
     {
-        yield return new WaitForSeconds(0.8f);
+        slide = false;
         controls.height = heightinit;
-        button_release = false;
-        slidevel = 16f;
+        slidevel = 14f;
+        LeftControlUpped = false ;
+        yield return new WaitForSeconds(0.5f);
     }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
