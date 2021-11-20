@@ -40,7 +40,7 @@ public class Hook : MonoBehaviour
         if (state)
         {
             transform.SetParent(initialParent);
-            transform.localPosition = new Vector3(0.343f, -0.665f, 0.4912f);
+            transform.localPosition = new Vector3(-0.4440004f, 0.461f, -0.574f);
             transform.localEulerAngles = new Vector3(0, 180, 0);
         }
         else

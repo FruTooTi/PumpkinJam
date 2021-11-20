@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider _timeSlider;
     [SerializeField] private Text _interactionText;
     [SerializeField] private GameObject _mainCanvas;
-    [SerializeField] private GameObject _player;
+    public GameObject player;
+    [SerializeField] private GameObject _levelEraser;
+    public Material levelErasedMat;
 
     public int currentLevel = 1;
     public const int lastLevelIndex = 2;
@@ -49,7 +51,8 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(_mainCanvas);
-            DontDestroyOnLoad(_player);
+            DontDestroyOnLoad(player);
+            DontDestroyOnLoad(_levelEraser);
         }
         else
         {
