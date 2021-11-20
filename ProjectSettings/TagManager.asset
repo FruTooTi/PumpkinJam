@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - LevelEraser
+  - LevelEnd
   layers:
   - Default
   - TransparentFX

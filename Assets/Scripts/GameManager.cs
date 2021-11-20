@@ -84,6 +84,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            LevelScore = 0;
+            TimeLeft = 0;
             UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         }
     }
