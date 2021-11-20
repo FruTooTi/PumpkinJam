@@ -9,12 +9,25 @@ public class Hook : MonoBehaviour
     public float currentStretchAmount;
     public float hookSpeed;
     public float grappleSpeed;
+    public Transform initialParent;
 
     private Transform hookEndTransform;
     private Coroutine stretchCoroutine;
+    private bool _isHooking = false;
+
+    private bool IsHooking
+    {
+        get { return _isHooking; }
+        set
+        {
+            PlayerMovement.Instance.enabled = !value;
+            _isHooking = value;
+        }
+    }
     void Start()
     {
         hookEndTransform = transform.GetChild(0).GetChild(0);
+        initialParent = transform.parent;
     }
 
     void Update()
@@ -22,13 +35,32 @@ public class Hook : MonoBehaviour
         
     }
 
+    private void SetParentState(bool state)
+    {
+        if (state)
+        {
+            transform.SetParent(initialParent);
+            transform.localPosition = new Vector3(0.343f, -0.665f, 0.4912f);
+            transform.localEulerAngles = new Vector3(0, 180, 0);
+        }
+        else
+        {
+            transform.SetParent(null);
+        }
+    }
+
     public void StretchHook()
     {
-        stretchCoroutine = StartCoroutine(Stretch());
+        if (!IsHooking)
+        {
+            stretchCoroutine = StartCoroutine(Stretch());
+            IsHooking = true;
+        }
     }
     
     private IEnumerator Stretch()
     {
+        SetParentState(false);
         while (currentStretchAmount < range)
         {
             float stretchAmount = Time.deltaTime * hookSpeed;
@@ -56,16 +88,29 @@ public class Hook : MonoBehaviour
             
             yield return new WaitForSeconds(Time.deltaTime);
         }
+
+        IsHooking = false;
+        
+        SetParentState(true);
     }
 
-    public IEnumerator Grapple(Vector3 finalPosition)
+    public IEnumerator Grapple(Vector3 finalPosition, float upperYBound)
     {
         Transform characterTransform = PlayerTriggers.Instance.transform;
-        while ((finalPosition - characterTransform.position).sqrMagnitude < 800f)
+        while ((finalPosition - characterTransform.position).sqrMagnitude > 1.2f)
         {
             PlayerMovement.Instance.controls.Move(-transform.forward * Time.deltaTime * grappleSpeed);
             yield return new WaitForSeconds(Time.deltaTime);
         }
+
+        while (Mathf.Abs(upperYBound - characterTransform.position.y) > .1f)
+        {
+            PlayerMovement.Instance.controls.Move(transform.up * Time.deltaTime);
+        }
+        
+        SetParentState(true);
+        
+        StartCoroutine(UnStretch());
     }
 
     public void OnCollisionEnter(Collision other)
@@ -76,7 +121,7 @@ public class Hook : MonoBehaviour
             if (Mathf.Abs((other.collider.bounds.max - hookEndTransform.position).y) < 0.5f &&
                 other.collider.bounds.max.y > PlayerMovement.Instance.transform.position.y + 5f)
             {
-                StartCoroutine(Grapple(hookEndTransform.position));
+                StartCoroutine(Grapple(hookEndTransform.position, other.collider.bounds.max.y));
             }
             else
             {

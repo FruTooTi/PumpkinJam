@@ -348,6 +348,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 534115134, guid: d1d76bc92e61d3e41b35053497377b78, type: 3}
+      propertyPath: range
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 534115134, guid: d1d76bc92e61d3e41b35053497377b78, type: 3}
+      propertyPath: hookSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 534115134, guid: d1d76bc92e61d3e41b35053497377b78, type: 3}
+      propertyPath: grappleSpeed
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 8117714608902729630, guid: d1d76bc92e61d3e41b35053497377b78, type: 3}
       propertyPath: m_Size.x
       value: 1
