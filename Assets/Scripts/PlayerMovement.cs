@@ -7,23 +7,20 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
 
     public CharacterController controls;
-    public Transform body;
-    public Transform camera;
-    public Transform groundCheck;
+    public Transform body, groundCheck, camera;
     public LayerMask groundMask;
 
     public float speed = 12f;
     public float slidevel = 16f;
     public float gravity = -9.81f;
     public float groundDistance = 0.4f;
-    bool isGrounded;
-    bool slide = false;
+    
+    private bool isGrounded, slide ;
 
-    Vector3 velocity;
-    float slide_speed;
-    float current_speed;
-    float heightinit;
-    Vector3 camerainit;
+    Vector3 velocity, camerainit;
+
+    private float slide_speed, heightinit, current_speed;
+
     void Start()
     {
         heightinit = controls.height;
@@ -33,10 +30,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded && velocity.y < 0)
-        {
-            velocity.y = -4f;
-        }
+        StayOnGround() ;
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
@@ -72,5 +66,13 @@ public class PlayerMovement : MonoBehaviour
                 slidevel = 20f;
             }
         }
+
+    void StayOnGround()
+    {
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -4f;
+        }
+    }
     }
 }
