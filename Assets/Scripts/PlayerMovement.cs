@@ -1,11 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called before the first frame update
-
     public CharacterController controls;
     public float speed = 12f;
     public float jumpvel = 4f;
@@ -13,9 +12,41 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundMask;
     public float groundDistance = 0.4f;
+    public bool movementEnabled = true;
+    public float forwardDashForce;
+    public float dashDuration;
+    public Hook hook;
+    public Transform camera;
     bool isGrounded;
 
     Vector3 velocity;
+
+    public static PlayerMovement Instance;
+
+    private bool isDashing;
+    IEnumerator DashIEnumerator()
+    {
+        Vector3 velocityAmount = camera.forward * forwardDashForce;
+        velocity += velocityAmount;
+        yield return new WaitForSeconds(dashDuration);
+        velocity -= velocityAmount;
+        isDashing = false;
+    }
+
+    public void Dash()
+    {
+        if (!isDashing)
+        {
+            StartCoroutine(DashIEnumerator());
+            isDashing = true;
+        }
+    }
+
+    private void Start()
+    {
+        Instance = this;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -25,19 +56,35 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -4f;
         }
 
-        if(Input.GetButtonDown("Jump") && isGrounded)
+        float x = 0;
+        float z = 0;
+        if (movementEnabled)
         {
-            velocity.y = 4f;
+            if (Input.GetButtonDown("Jump") && isGrounded)
+            {
+                velocity.y = 4f;
+            }
+
+            x = Input.GetAxis("Horizontal");
+            z = Input.GetAxis("Vertical");
+
+
+            Vector3 move = transform.right * x + transform.forward * z;
+            controls.Move(move * speed * Time.deltaTime);
+
+            velocity.y += gravity * Time.deltaTime;
+            controls.Move(velocity * Time.deltaTime);
+            
+            
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                hook.StretchHook();
+            }
+
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                Dash();
+            }
         }
-
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        Vector3 move = transform.right * x + transform.forward * z;
-        controls.Move(move * speed * Time.deltaTime);
-
-        velocity.y += gravity * Time.deltaTime;
-        controls.Move(velocity * Time.deltaTime);
-        
     }
 }

@@ -20,7 +20,7 @@ public class Hook : MonoBehaviour
         get { return _isHooking; }
         set
         {
-            PlayerMovement.Instance.enabled = !value;
+            PlayerMovement.Instance.movementEnabled = !value;
             _isHooking = value;
         }
     }
@@ -103,13 +103,15 @@ public class Hook : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
         }
 
-        while (Mathf.Abs(upperYBound - characterTransform.position.y) > .1f)
+        float jumpTime = 0f;
+        while (jumpTime < .5f)
         {
-            PlayerMovement.Instance.controls.Move(transform.up * Time.deltaTime);
+            PlayerMovement.Instance.controls.Move((new Vector3(0, 5, 0) + PlayerMovement.Instance.transform.forward) * Time.deltaTime);
+            
+            jumpTime += Time.deltaTime;
+            yield return new WaitForSeconds(Time.deltaTime);
         }
-        
-        SetParentState(true);
-        
+
         StartCoroutine(UnStretch());
     }
 
