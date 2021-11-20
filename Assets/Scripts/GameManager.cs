@@ -7,6 +7,11 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Slider _timeSlider;
     [SerializeField] private Text _interactionText;
+    [SerializeField] private GameObject _mainCanvas;
+    [SerializeField] private GameObject _player;
+
+    public int currentLevel = 1;
+    public const int lastLevelIndex = 2;
     
     private float _TimeLeft = 1f;
     public float TimeLeft
@@ -42,6 +47,13 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(_mainCanvas);
+            DontDestroyOnLoad(_player);
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -59,6 +71,18 @@ public class GameManager : MonoBehaviour
     public void SetActiveInteractionMessage(bool state)
     {
         _interactionText.transform.parent.gameObject.SetActive(state);
+    }
+
+    public void LevelUp()
+    {
+        if (++currentLevel > lastLevelIndex)
+        {
+            GameOver(true);
+        }
+        else
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
+        }
     }
     
     public void GameOver(bool success)
