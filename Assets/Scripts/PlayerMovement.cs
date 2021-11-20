@@ -62,7 +62,8 @@ public class PlayerMovement : MonoBehaviour
     //Oyuncunun kaymasını sağlar
     void isSliding(Vector3 move)
     {
-        if (Input.GetKeyDown(KeyCode.LeftControl) && current_speed > slide_speed / 1.5)
+        slide = Input.GetKeyDown(KeyCode.LeftControl) && current_speed > slide_speed / 1.5 ;
+        if (slide)
         {
             controls.height = heightinit / 4;
             camera.localPosition = new Vector3(camerainit.x, camerainit.y / 3, camerainit.z);
