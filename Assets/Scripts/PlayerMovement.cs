@@ -9,11 +9,12 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controls;
     public Transform body;
     public Transform camera;
+    public Transform groundCheck;
+    public LayerMask groundMask;
+
     public float speed = 12f;
     public float slidevel = 16f;
     public float gravity = -9.81f;
-    public Transform groundCheck;
-    public LayerMask groundMask;
     public float groundDistance = 0.4f;
     bool isGrounded;
     bool slide = false;
@@ -32,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        if (isGrounded == true && velocity.y < 0)
+        if (isGrounded && velocity.y < 0)
         {
             velocity.y = -4f;
         }
