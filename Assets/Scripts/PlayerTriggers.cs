@@ -36,6 +36,8 @@ public class PlayerTriggers : MonoBehaviour
         }
         else if (other.CompareTag("LevelEnd"))
         {
+            PlayerMovement.Instance.velocity = Vector3.zero;
+            PlayerMovement.Instance.movementEnabled = false;
             GameManager.Instance.LevelUp();
         }
     }

@@ -200,31 +200,34 @@ public class PlayerMovement : MonoBehaviour
             velocity.x = 0;
             velocity.z = 0;
             wall_jump = true;
-            if (current_wall.layer == 7)
+            if (current_wall.layer == 7 || current_wall.layer == 10)
             {
                 if ((Input.GetButtonDown("Jump") && !isGrounded) && wall_jump == true)
                 {
-                    velocity.y = 5f;
+                    velocity.y = 4f;
                     wall_jump = false;
                     prev_wall = hit.gameObject;
                 }
             }
+
         }
         if (wall_jump == false)
         {
             velocity.x = hit.normal.x * 15.5f;
             velocity.z = hit.normal.z * 15.5f;
-            velocity.y = 10f ;
             speed = 6f;
             velocity.x = hit.normal.x * 15.5f;
             velocity.z = hit.normal.z * 15.5f;
-            velocity.y = 10f ;
+            if(current_wall.layer == 7)
+            {
+                velocity.y = 12f;
+            }
             wall_jump = true;
         }
 
         if (hit.gameObject.layer == 8)
         {
-            velocity.y = 20f ;
+            velocity.y = 15f ;
         }
     }
 }

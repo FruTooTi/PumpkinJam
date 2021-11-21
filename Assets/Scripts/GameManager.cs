@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Text _interactionText;
     [SerializeField] private GameObject _mainCanvas;
     [SerializeField] private GameObject _failedPanel;
+    [SerializeField] private GameObject _endPanel;
     [SerializeField] private Text _failedPanelText;
     public GameObject player;
     public PlayerStartPoint levelStartPoint;
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
     public Material levelErasedMat;
 
     public int currentLevel = 2;
-    public const int lastLevelIndex = 5;
+    public const int lastLevelIndex = 8;
     
     private float _TimeLeft = 1f;
     public float TimeLeft
@@ -30,12 +31,12 @@ public class GameManager : MonoBehaviour
             _TimeLeft = value;
             if (value <= 0)
             {
-                GameOver(GameOverStatus.TimeOver);
+                //GameOver(GameOverStatus.TimeOver);
             }
         }
     }
 
-    public const float timeDecreasePerSecond = .01f;
+    public const float timeDecreasePerSecond = .02f;
 
     public static GameManager Instance;
 
@@ -129,7 +130,7 @@ public class GameManager : MonoBehaviour
         PlayerMovement.Instance.movementEnabled = false;
         if (status == GameOverStatus.Finished)
         {
-            
+            _endPanel.SetActive(true);
         }
         else
         {
@@ -150,5 +151,13 @@ public class GameManager : MonoBehaviour
 
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void ReturnMainMenu()
+    {
+        Destroy(_mainCanvas);
+        Destroy(player);
+        Destroy(gameObject);
+        SceneManager.LoadScene(0);
     }
 }
