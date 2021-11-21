@@ -72,12 +72,38 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -4f;
             velocity.x = 0;
             velocity.z = 0;
+<<<<<<< Updated upstream
+=======
+            speed = 12f;
+            current_wall = null;
+            prev_wall = null;
+>>>>>>> Stashed changes
         }
 
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             velocity.y = 5.4f;
         }
+<<<<<<< Updated upstream
+=======
+
+        if (velocity.x != 0)
+        {
+            if(velocity.x > 0)
+                velocity.x -= 0.02f;
+            else
+                velocity.x += 0.02f;
+        }
+        if(velocity.z != 0)
+        {
+            if (velocity.z > 0)
+                velocity.z -= 0.02f;
+            else
+                velocity.z += 0.02f;
+        }
+        return isGrounded ;
+    }
+>>>>>>> Stashed changes
 
 <<<<<<< Updated upstream
         velocity.y += gravity * Time.deltaTime;
@@ -153,7 +179,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if ((Input.GetButtonDown("Jump") && !isGrounded) && wall_jump == true)
                 {
-                    velocity.y = 6.3f;
+                    velocity.y = 5f;
                     wall_jump = false;
                     prev_wall = hit.gameObject;
                 }
@@ -161,8 +187,15 @@ public class PlayerMovement : MonoBehaviour
         }
         if (wall_jump == false)
         {
+<<<<<<< Updated upstream
             velocity.x = hit.normal.x * 12;
             velocity.z = hit.normal.z * 12;
+=======
+            speed = 6f;
+            velocity.x = hit.normal.x * 12;
+            velocity.z = hit.normal.z * 12;
+            wall_jump = true;
+>>>>>>> Stashed changes
         }
     }
 >>>>>>> Stashed changes
