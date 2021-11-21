@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
 
     public CharacterController controls;
-    public Transform body, groundCheck, camera;
+    public Transform body, groundCheck, camera ;
     public LayerMask groundMask;
 
     public float speed = 12f;
@@ -147,5 +147,12 @@ public class PlayerMovement : MonoBehaviour
             velocity.x = hit.normal.x * 11;
             velocity.z = hit.normal.z * 11;
         }
+
+        if (hit.gameObject.layer == 8)
+        {
+            velocity.y = 20f ;
+        }
     }
 }
+
+
