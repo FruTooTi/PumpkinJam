@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking.PlayerConnection;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -8,12 +10,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Slider _timeSlider;
     [SerializeField] private Text _interactionText;
     [SerializeField] private GameObject _mainCanvas;
+    [SerializeField] private GameObject _failedPanel;
+    [SerializeField] private Text _failedPanelText;
     public GameObject player;
+    public PlayerStartPoint levelStartPoint;
     [SerializeField] private GameObject _levelEraser;
     public Material levelErasedMat;
 
-    public int currentLevel = 1;
-    public const int lastLevelIndex = 2;
+    public int currentLevel = 2;
+    public const int lastLevelIndex = 5;
     
     private float _TimeLeft = 1f;
     public float TimeLeft
@@ -25,7 +30,8 @@ public class GameManager : MonoBehaviour
             _TimeLeft = value;
             if (value <= 0)
             {
-                GameOver(false);
+                print("t");
+                GameOver(GameOverStatus.TimeOver);
             }
         }
     }
@@ -53,6 +59,23 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(_mainCanvas);
             DontDestroyOnLoad(player);
             DontDestroyOnLoad(_levelEraser);
+
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += (arg0, mode) =>
+            {
+                if (currentLevel >= 2)
+                {
+                    levelStartPoint = GameObject.FindObjectOfType<PlayerStartPoint>();
+                    levelStartPoint.PullPlayer();
+                    _failedPanel.SetActive(false);
+                    PlayerMovement.Instance.isFailed = false;
+                    if (SceneManager.GetActiveScene().buildIndex == 1)
+                    {
+                        UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+                    }
+                }
+            };
+
+            UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
         else
         {
@@ -80,7 +103,7 @@ public class GameManager : MonoBehaviour
     {
         if (++currentLevel > lastLevelIndex)
         {
-            GameOver(true);
+            GameOver(GameOverStatus.Finished);
         }
         else
         {
@@ -89,9 +112,52 @@ public class GameManager : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         }
     }
-    
-    public void GameOver(bool success)
+
+    public void CloseFailPanel()
     {
-        //TODO
+        _failedPanel.SetActive(false);
+    }
+
+    public void RestartLevel()
+    {
+        PlayerMovement.Instance.movementEnabled = true;
+        _failedPanel.SetActive(false);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        SceneManager.LoadScene(currentLevel);
+    }
+    
+    public enum GameOverStatus
+    {
+        Finished,
+        TimeOver,
+        FellOff
+    };
+    public void GameOver(GameOverStatus status)
+    {
+        PlayerMovement.Instance.movementEnabled = false;
+        if (status == GameOverStatus.Finished)
+        {
+            
+        }
+        else
+        {
+            _failedPanel.SetActive(true);
+            string failString = "";
+            switch (status)
+            {
+                case GameOverStatus.FellOff:
+                    failString = "No, you can't fly.";
+                    break;
+                case GameOverStatus.TimeOver:
+                    failString = "Be faster next time.";
+                    break;
+            }
+
+            _failedPanelText.text = "Failed: \n" + failString;
+        }
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 }

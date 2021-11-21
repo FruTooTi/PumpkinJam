@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public Hook hook;
     public Transform camera;
     bool isGrounded;
+    public bool isFailed;
 
     Vector3 velocity;
 
@@ -44,7 +45,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -80,11 +88,12 @@ public class PlayerMovement : MonoBehaviour
             {
                 hook.StretchHook();
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.X))
-            {
-                Dash();
-            }
+        if (!isFailed && transform.position.y < -30f)
+        {
+            GameManager.Instance.GameOver(GameManager.GameOverStatus.FellOff);
+            isFailed = true;
         }
     }
 }

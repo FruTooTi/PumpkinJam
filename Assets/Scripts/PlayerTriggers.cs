@@ -7,10 +7,9 @@ public class PlayerTriggers : MonoBehaviour
 {
     public IInteractable interactionObject;
 
-    public static PlayerTriggers Instance;
     void Start()
     {
-        Instance = this;
+        
     }
 
     void Update()

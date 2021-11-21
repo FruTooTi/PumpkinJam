@@ -6,12 +6,17 @@ public class PlayerStartPoint : MonoBehaviour
 {
     void Start()
     {
-        GameManager.Instance.player.transform.position = transform.position;
-        GameManager.Instance.player.transform.eulerAngles = transform.eulerAngles;
+        PullPlayer();
     }
 
     void Update()
     {
         
+    }
+
+    public void PullPlayer()
+    {
+        GameManager.Instance.player.transform.position = transform.position;
+        GameManager.Instance.player.transform.eulerAngles = transform.eulerAngles;
     }
 }

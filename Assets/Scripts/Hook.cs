@@ -96,7 +96,7 @@ public class Hook : MonoBehaviour
 
     public IEnumerator Grapple(Vector3 finalPosition, float upperYBound)
     {
-        Transform characterTransform = PlayerTriggers.Instance.transform;
+        Transform characterTransform = PlayerMovement.Instance.transform;
         while ((finalPosition - characterTransform.position).sqrMagnitude > 1.2f)
         {
             PlayerMovement.Instance.controls.Move(-transform.forward * Time.deltaTime * grappleSpeed);
