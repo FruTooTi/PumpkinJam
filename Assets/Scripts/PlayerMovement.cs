@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     public float slidevel = 14f;
     public float gravity = -9.81f;
     public float groundDistance = 0.4f;
+    public float incresing_Speed = 1f;
+    public float lastp, ChekingFall = 10f ;
     
     public bool isGrounded, slide = false;
     public bool button_release = false;
@@ -32,6 +34,7 @@ public class PlayerMovement : MonoBehaviour
         heightinit = controls.height;
         camerainit = camera.localPosition;
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,15 +60,13 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -4f;
-            velocity.x = 0;
-            velocity.z = 0;
             current_wall = null;
             prev_wall = null;
         }
         
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
-            velocity.y = 6.8f;
+            velocity.y += 6.8f;
         }
         return isGrounded ;
     }
@@ -77,11 +78,13 @@ public class PlayerMovement : MonoBehaviour
             slide = Input.GetKeyDown(KeyCode.LeftControl) && current_speed > slide_speed / 1.5 && isGrounded;
         if (slide)
         {
+            ChekingFall = transform.position.y - lastp ;
+            lastp = transform.position.y ;
             controls.height = heightinit / 4;
             camera.localPosition = new Vector3(camerainit.x, camerainit.y / 3, camerainit.z);
-            controls.Move(Vector3.right * slidevel * Time.deltaTime);
-            slidevel -= 0.05f;
-            if (slidevel <= -11f )
+            controls.SimpleMove(move * slidevel * Time.deltaTime);
+            slidevel -= 0.05f ;
+            if (slidevel <= -11f && ChekingFall >= 0 || Input.GetButtonDown("Jump"))
             {
                 StartCoroutine(CooldownTimer()) ;
             }
@@ -92,6 +95,15 @@ public class PlayerMovement : MonoBehaviour
             if (slidevel < 2f && LeftControlUpped)
             {
                 StartCoroutine(CooldownTimer()) ;
+            }
+            if (ChekingFall < 0)
+            {
+                controls.Move(move * Time.deltaTime * incresing_Speed) ;
+                incresing_Speed += 0.04f ;
+            }
+            if (slidevel <= -11f && ChekingFall < 0)
+            {
+                slidevel = -12f;
             }
         }
     }
@@ -107,6 +119,7 @@ public class PlayerMovement : MonoBehaviour
         controls.height = heightinit;
         slidevel = 14f;
         LeftControlUpped = false ;
+        incresing_Speed = 1f;
         yield return new WaitForSeconds(0.5f);
     }
 
