@@ -16,9 +16,13 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public float incresing_Speed = 1f;
     public float lastp, ChekingFall = 10f ;
-    
+    public bool movementEnabled = true;
     public bool isGrounded, slide = false;
     public bool button_release = false;
+	public float forwardDashForce;
+    public float dashDuration;
+    public Hook hook;
+	public bool isFailed;
 
     Vector3 velocity, camerainit, wall_jump_propulsion;
 
@@ -28,11 +32,42 @@ public class PlayerMovement : MonoBehaviour
     bool wall_jump , LeftControlUpped;
 
     private float slide_speed, heightinit, current_speed;
+	
+	public static PlayerMovement Instance;
+
+	private bool isDashing;
+	IEnumerator DashIEnumerator()
+    {
+        Vector3 velocityAmount = camera.forward * forwardDashForce;
+        //velocity += velocityAmount;
+        controls.Move(velocityAmount);
+        yield return new WaitForSeconds(dashDuration);
+        //velocity -= velocityAmount;
+        isDashing = false;
+    }
+
+    public void Dash()
+    {
+        if (!isDashing)
+        {
+            StartCoroutine(DashIEnumerator());
+            isDashing = true;
+        }
+    }
 
     void Start()
     {
         heightinit = controls.height;
         camerainit = camera.localPosition;
+		
+		if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -40,17 +75,32 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        StayOnGround() ;
+        StayOnGround();
 
-        velocity.y += gravity * Time.deltaTime;
-        controls.Move(velocity * Time.deltaTime);
 
-        controls.Move(move() * speed * Time.deltaTime);
+        if (movementEnabled)
+        {
+            velocity.y += gravity * Time.deltaTime;
+            controls.Move(velocity * Time.deltaTime);
 
-        slide_speed = Mathf.Sqrt(Mathf.Pow(12f,2f) + Mathf.Pow(0.12f,2f));
-        current_speed = Mathf.Sqrt(Mathf.Pow(controls.velocity.x, 2f) + Mathf.Pow(controls.velocity.z, 2f));
+            controls.Move(move() * speed * Time.deltaTime);
 
-        isSliding(move(), slide_speed, current_speed);
+            slide_speed = Mathf.Sqrt(Mathf.Pow(12f, 2f) + Mathf.Pow(0.12f, 2f));
+            current_speed = Mathf.Sqrt(Mathf.Pow(controls.velocity.x, 2f) + Mathf.Pow(controls.velocity.z, 2f));
+
+            isSliding(move(), slide_speed, current_speed);
+
+            if (Input.GetKeyDown(KeyCode.H))
+            {
+                hook.StretchHook();
+            }
+        }
+
+        if (!isFailed && transform.position.y < -30f)
+        {
+            GameManager.Instance.GameOver(GameManager.GameOverStatus.FellOff);
+            isFailed = true;
+        }
     }
 
     //Yeri denetler 

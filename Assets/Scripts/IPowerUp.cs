@@ -14,7 +14,7 @@ public class IPowerUp : IInteractable
 
     void Update()
     {
-        transform.Rotate(new Vector3(0, Time.deltaTime * 100, 0),Space.World);
+        transform.Rotate(new Vector3(0, Time.deltaTime * 125, 0),Space.World);
     }
 
     public override void Interact()

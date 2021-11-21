@@ -30,22 +30,11 @@ public class GameManager : MonoBehaviour
             _TimeLeft = value;
             if (value <= 0)
             {
-                print("t");
                 GameOver(GameOverStatus.TimeOver);
             }
         }
     }
-    
-    private int _LevelScore = 0;
-    public int LevelScore
-    {
-        get { return _LevelScore; }
-        set
-        {
-            _LevelScore = value;
-        }
-    }
-    
+
     public const float timeDecreasePerSecond = .01f;
 
     public static GameManager Instance;
@@ -107,8 +96,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            LevelScore = 0;
-            TimeLeft = 0;
+            TimeLeft = 1f;
             UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         }
     }
@@ -120,8 +108,8 @@ public class GameManager : MonoBehaviour
 
     public void RestartLevel()
     {
-        PlayerMovement.Instance.movementEnabled = true;
         _failedPanel.SetActive(false);
+        PlayerMovement.Instance.movementEnabled = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         SceneManager.LoadScene(currentLevel);

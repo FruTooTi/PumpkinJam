@@ -26,6 +26,7 @@ public class Hook : MonoBehaviour
     }
     void Start()
     {
+        Physics.IgnoreLayerCollision(8,9);
         hookEndTransform = transform.GetChild(0).GetChild(0);
         initialParent = transform.parent;
     }
@@ -40,7 +41,7 @@ public class Hook : MonoBehaviour
         if (state)
         {
             transform.SetParent(initialParent);
-            transform.localPosition = new Vector3(-0.4440004f, 0.461f, -0.574f);
+            transform.localPosition = new Vector3(0.3430001f, -0.665f, 0.491277f);
             transform.localEulerAngles = new Vector3(0, 180, 0);
         }
         else
@@ -97,7 +98,7 @@ public class Hook : MonoBehaviour
     public IEnumerator Grapple(Vector3 finalPosition, float upperYBound)
     {
         Transform characterTransform = PlayerMovement.Instance.transform;
-        while ((finalPosition - characterTransform.position).sqrMagnitude > 1.2f)
+        while ((finalPosition - characterTransform.position).sqrMagnitude > 5f)
         {
             PlayerMovement.Instance.controls.Move(-transform.forward * Time.deltaTime * grappleSpeed);
             yield return new WaitForSeconds(Time.deltaTime);
@@ -120,9 +121,9 @@ public class Hook : MonoBehaviour
         if (stretchCoroutine != null)
         {
             StopCoroutine(stretchCoroutine);
-            if (Mathf.Abs((other.collider.bounds.max - hookEndTransform.position).y) < 0.5f &&
-                other.collider.bounds.max.y > PlayerMovement.Instance.transform.position.y + 5f)
+            if (other.gameObject.CompareTag("GrappleTarget"))
             {
+                
                 StartCoroutine(Grapple(hookEndTransform.position, other.collider.bounds.max.y));
             }
             else

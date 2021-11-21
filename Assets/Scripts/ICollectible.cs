@@ -17,6 +17,6 @@ public class ICollectible : IInteractable
 
     public override void Interact()
     {
-        GameManager.Instance.LevelScore += score;
+        
     }
 }
