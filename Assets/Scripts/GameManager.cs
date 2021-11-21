@@ -55,8 +55,10 @@ public class GameManager : MonoBehaviour
                 {
                     levelStartPoint = GameObject.FindObjectOfType<PlayerStartPoint>();
                     levelStartPoint.PullPlayer();
+                    _levelEraser.transform.position = levelStartPoint.transform.position - new Vector3(20, 0, 0);
                     _failedPanel.SetActive(false);
                     PlayerMovement.Instance.isFailed = false;
+                    PlayerMovement.Instance.movementEnabled = true;
                     if (SceneManager.GetActiveScene().buildIndex == 1)
                     {
                         UnityEngine.SceneManagement.SceneManager.LoadScene(2);
@@ -97,6 +99,7 @@ public class GameManager : MonoBehaviour
         else
         {
             TimeLeft = 1f;
+            PlayerMovement.Instance.movementEnabled = false;
             UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         }
     }

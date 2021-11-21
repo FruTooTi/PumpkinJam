@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public Hook hook;
 	public bool isFailed;
 
-    Vector3 velocity, camerainit, wall_jump_propulsion;
+    public Vector3 velocity, camerainit, wall_jump_propulsion;
 
     public GameObject current_wall;
     public GameObject prev_wall;

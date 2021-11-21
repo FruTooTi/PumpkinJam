@@ -16,6 +16,8 @@ public class PlayerStartPoint : MonoBehaviour
 
     public void PullPlayer()
     {
+        PlayerMovement.Instance.isGrounded = true;
+        PlayerMovement.Instance.velocity = Vector3.zero;
         GameManager.Instance.player.transform.position = transform.position;
         GameManager.Instance.player.transform.eulerAngles = transform.eulerAngles;
     }

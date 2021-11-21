@@ -171,10 +171,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80f1f23520fce949ae63f6d829c3615, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 50
+  range: 100
   currentStretchAmount: 0
-  hookSpeed: 80
-  grappleSpeed: 10
+  hookSpeed: 110
+  grappleSpeed: 20
   initialParent: {fileID: 0}
 --- !u!54 &363240839
 Rigidbody:
@@ -306,8 +306,8 @@ MonoBehaviour:
   isGrounded: 0
   slide: 0
   button_release: 0
-  forwardDashForce: 55
-  dashDuration: 0.3
+  forwardDashForce: 15
+  dashDuration: 0.2
   hook: {fileID: 8005239658890962969}
   isFailed: 0
   current_wall: {fileID: 0}
