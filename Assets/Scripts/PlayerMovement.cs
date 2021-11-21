@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float speed = 12f;
     public float slidevel = 14f;
-    public float gravity = -9.81f;
+    public float gravity = -9.85f;
     public float groundDistance = 0.4f;
     public float incresing_Speed = 1f;
     public float lastp, ChekingFall = 10f ;
@@ -69,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
         
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
-            velocity.y += 6.8f;
+            velocity.y += 11f;
         }
 
         if (velocity.x != 0)
@@ -162,11 +162,13 @@ public class PlayerMovement : MonoBehaviour
         }
         if (wall_jump == false)
         {
-            velocity.x = hit.normal.x * 12;
-            velocity.z = hit.normal.z * 12;
+            velocity.x = hit.normal.x * 15.5f;
+            velocity.z = hit.normal.z * 15.5f;
+            velocity.y = 10f ;
             speed = 6f;
-            velocity.x = hit.normal.x * 12;
-            velocity.z = hit.normal.z * 12;
+            velocity.x = hit.normal.x * 15.5f;
+            velocity.z = hit.normal.z * 15.5f;
+            velocity.y = 10f ;
             wall_jump = true;
         }
 
