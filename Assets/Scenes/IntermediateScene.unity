@@ -851,7 +851,7 @@ MonoBehaviour:
   levelStartPoint: {fileID: 0}
   _levelEraser: {fileID: 2057775120}
   levelErasedMat: {fileID: 2100000, guid: 98cdbe4ceef17e14a9efce866f7141a6, type: 2}
-  currentLevel: 4
+  currentLevel: 2
 --- !u!4 &1215209187
 Transform:
   m_ObjectHideFlags: 0

@@ -33,7 +33,7 @@ public class PlayerTriggers : MonoBehaviour
             {
                 GameManager.Instance.ShowInteractionMessage(interactionObject);
             }
-        } 
+        }
         else if (other.CompareTag("LevelEnd"))
         {
             GameManager.Instance.LevelUp();

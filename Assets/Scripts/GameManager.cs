@@ -47,15 +47,15 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(_mainCanvas);
             DontDestroyOnLoad(player);
-            DontDestroyOnLoad(_levelEraser);
+            //DontDestroyOnLoad(_levelEraser);
 
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += (arg0, mode) =>
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged += (arg0, mode) =>
             {
                 if (currentLevel >= 2)
                 {
                     levelStartPoint = GameObject.FindObjectOfType<PlayerStartPoint>();
                     levelStartPoint.PullPlayer();
-                    _levelEraser.transform.position = levelStartPoint.transform.position - new Vector3(20, 0, 0);
+                    //_levelEraser.transform.position = levelStartPoint.transform.position - new Vector3(20, 0, 0);
                     _failedPanel.SetActive(false);
                     PlayerMovement.Instance.isFailed = false;
                     PlayerMovement.Instance.movementEnabled = true;
@@ -92,14 +92,14 @@ public class GameManager : MonoBehaviour
 
     public void LevelUp()
     {
-        if (++currentLevel > lastLevelIndex)
+        currentLevel++;
+        if (currentLevel > lastLevelIndex)
         {
             GameOver(GameOverStatus.Finished);
         }
         else
         {
             TimeLeft = 1f;
-            PlayerMovement.Instance.movementEnabled = false;
             UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevel);
         }
     }
